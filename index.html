@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="script.js"></script>
+</head>
+
+<body>
+    <header>
+        <h1 class="header-details">Animals</h1>
+        <a href="#" id="add-link">+</a>
+    </header>
+
+    <div class="columns two-columns">
+        <div id="animal-list" class="columns"></div>
+        <div id="animal-details-column">
+            <h2 class="header-details">Animal Information</h2>
+
+            <div id="animal-details"></div>
+        </div>
+    </div>
+    <div id="add-edit-animal-container" class="dialog transparent">
+        <span class="close">&times;</span>
+
+        <h3 id="add-edit-title">Animal</h3>
+        <form id="add-edit-animal-form" method="post">
+            <input type="hidden" name="_id" value="-1" />
+            <p>
+                <label for="name ">Animal Name:</label>
+                <input type="text" id="name" name="name" required />
+            </p>
+            <p>
+                <label for="description">Color:</label>
+                <input type="text" id="description" name="description" required />
+            </p>
+            <p>
+                <label for="description">Size:</label>
+                <input type="text" id="description" name="description" required />
+            </p>
+            <p>
+                <label for="description">Located:</label>
+                <input type="text" id="description" name="description" required />
+            </p>
+            <p>
+                <label for="description">Diet:</label>
+                <input type="text" id="description" name="description" required />
+            </p>
+
+            <p>
+                <label for="img">Upload Image:</label>
+                <input type="file" id="img" name="img" />
+            </p>
+
+            <p>
+                <button type="submit">Submit</button>
+            </p>
+        </form>
+    </div>
+</body>
+
+</html>
