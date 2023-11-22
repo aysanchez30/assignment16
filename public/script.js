@@ -27,12 +27,33 @@ const showAnimals = async() => {
         img.src = animal.img;
         section.append(img);
 
+        const editButton = document.createElement("button");
+        editButton.textContent = "Edit";
+        section.append(editButton);
+
+        editButton.onclick = (e) => {
+            e.preventDefault();
+            populateEditForm(animal);
+        }
+
         a.onclick = (e) => {
             e.preventDefault();
             displayDetails(animal);
         };
+        const deleteButton = document.createElement("button");
+        deleteButton.textContent = "Delete";
+        section.append(deleteButton);
+
+        deleteButton.onclick = (e) => {
+            e.preventDefault();
+            const confirmDelete = confirm("Are you sure you want to delete this animal?");
+            if (confirmDelete) {
+                deleteAnimal(animal);
+            }
+        };
     });
 };
+
 
 const displayDetails = (animal) => {
     const animalDetails = document.getElementById("animal-details");
@@ -74,7 +95,7 @@ const displayDetails = (animal) => {
     populateEditForm(animal);
 };
 
-const deleteAnimal = async(animal) => {
+const deleteAnimal = async (animal) => {
     let response = await fetch(`/api/animals/${animal._id}`, {
         method: "DELETE",
         headers: {
@@ -83,9 +104,10 @@ const deleteAnimal = async(animal) => {
     });
 
     if (response.status != 200) {
-        console.log("error deleting");
+        console.log("Error deleting");
         return;
     }
+    showAnimals();
 
     let result = await response.json();
     showAnimals();
@@ -106,26 +128,27 @@ const populateEditForm = (animal) => {
     populateLocated(animal)
 };
 
+
 const populateLocated = (animal) => {
     const section = document.getElementById("description-boxes");
 
-    animal.description.forEach((description) => {
-        const input = document.createElement("input");
-        input.type = "text";
-        input.value = description;
-        section.append(input);
-    });
+animal.located.forEach((location) => {
+    const input = document.createElement("input");
+    input.type = "text";
+    input.value = location;
+    section.append(input);
+});
+
 }
 
-const addEditAnimal = async(e) => {
+const addEditAnimal = async (e) => {
     e.preventDefault();
     const form = document.getElementById("add-edit-animal-form");
     const formData = new FormData(form);
     let response;
-    formData.append("description", getDescription());
 
-    //add animal
-    if (form._id.value == -1) {
+    // Add a new animal
+    if (form._id.value === "-1") {
         formData.delete("_id");
 
         response = await fetch("/api/animals", {
@@ -133,35 +156,27 @@ const addEditAnimal = async(e) => {
             body: formData
         });
     }
-    //edit an existing animal
+    // Edit an existing animal
     else {
-
-        console.log(...formData);
-
         response = await fetch(`/api/animals/${form._id.value}`, {
             method: "PUT",
             body: formData
         });
     }
 
-    //got data from server
-    if (response.status != 200) {
+    if (response.status !== 200) {
         console.log("Error posting data");
+        return;
     }
-
-    animal = await response.json();
-
-    if (form._id.value != -1) {
-        displayDetails(animal);
-    }
+    showAnimals ();
 
     resetForm();
-    document.querySelector(".dialog").classList.add("transparent");
-    showAnimals();
+    const dialog = document.querySelector(".dialog");
+    dialog.classList.add("transparent");
 };
 
 const getDescription = () => {
-    const inputs = document.querySelectorAll("#descrption-boxes input"); // Typo: should be "description-boxes" instead of "descrption-boxes"
+    const inputs = document.querySelectorAll("#description-boxes input");
     let description = [];
 
     inputs.forEach((input) => {
@@ -175,17 +190,24 @@ const resetForm = () => {
     const form = document.getElementById("add-edit-animal-form");
     form.reset();
     form._id.value = "-1";
-    document.getElementById("descrption-boxes").innerHTML = "";
+    document.getElementById("description-boxes").innerHTML = "";
 };
 
 const showHideAdd = (e) => {
     e.preventDefault();
-    document.querySelector(".dialog").classList.remove("transparent");
+    const dialog = document.querySelector(".dialog");
+    dialog.classList.remove("transparent");
     document.getElementById("add-edit-title").innerHTML = "Add Animal";
     resetForm();
 };
 
-
+const addAnimal = (e) => {
+    e.preventDefault();
+    const section = document.getElementById("descrption-boxes");
+    const input = document.createElement("input");
+    input.type = "text";
+    section.append(input);
+}
 
 window.onload = () => {
     showAnimals();

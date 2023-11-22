@@ -59,7 +59,7 @@ const animals = [
     image: "images/koala.jpeg",
   },
   {
-    _id: 8,
+    _id: 6,
     name: "Clownfish",
     color: "Orange with black and white stripes",
     size: "Up to 4 inches",
